@@ -29,6 +29,35 @@ function App() {
     setStatus("Loading..."); // updates state to laoding to show user requested it
     setError("null"); // clears previous error if any
     setGifs([]); // clears previous search results
+    try {
+      const url = `${BASE_URL}?api_key=${API_KEY}&q=${encodeURIComponent(
+        searchTerm
+      )}&limit=25`; //api url, including the api key, the encoded search term, and a limit of 25 results
+      // encodeRURIComponent - global JavaScript function that prepares a string for inclusion as a URL component
+      const response = await fetch(url); // executes the ajax request and waits for the response
+
+      if (!response.ok) {
+        //checks http response status
+        throw new Error(`http error! : ${response.status}`); // if  error, throws a new error object with the status code.
+      }
+
+      const data = await response.json(); //parses response as json, waits for completion
+
+      if (data.data.length === 0) {
+        //use data.data to access the array of GIFs - list of GIFs located inside a property named data within that top-level object
+        setError(
+          `Sorry! No GIFs were found for "${search}". Try a different term.`
+        ); //error message if no results were found
+      } else {
+        setGifs(data.data); //updates gifs state with the array from api response
+        setError(null); // makes sure error state is cleared
+      }
+      setStatus("idle"); // resets status state - confirms that the results are complete for the last request.
+    } catch (e) {
+      //catches any errors
+      setError(`Search Failed: ${e.message}`);
+      setStatus("error");
+    }
   };
 
   return (
