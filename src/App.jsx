@@ -1,6 +1,6 @@
 import { useState } from "react";
 import SearchBar from "./components/SearchBar";
-// import GifGrabber from "./components/GifGrabber";
+import GifGrabber from "./components/GifGrabber";
 import "./App.css";
 
 const API_KEY = "nlR1KBPhlM4DpEfcmFwNgztGAmDofwlR";
@@ -70,7 +70,7 @@ function App() {
         onSearch={fetchGifs} // passes function as a prop to be called when the search button is pressed
         isLoading={status === "loading"} // passes boolean prop to disable the button while the status is loading
       />
-      {/* <GifGrabber gifs={gifs} status={status} error={error} /> */}
+      <GifGrabber gifs={gifs} status={status} error={error} />
       {/* renders gifgrabber compo passing the current gif data, status, and error state as props  */}
     </div>
   );
