@@ -17,7 +17,19 @@ function App() {
   const [status, setStatus] = useState("idle"); //starting idle - neutral state
 
   // initializes state to hold error messages from the api call
-  const [error, setError] = useState(null); //start at null - expected to eventually hold a complex data object or should indicate the complete absence of data.
+  const [error, setError] = useState(null); //start at null - expected to eventually hold a complex data object or should indicate the complete absence of data
+
+  // ajax implementation
+  const fetchGifs = async () => {
+    // function to handle api fetch
+
+    if (!search.trim()) return;
+    //checks if search is empty, if so function stops
+
+    setStatus("Loading..."); // updates state to laoding to show user requested it
+    setError("null"); // clears previous error if any
+    setGifs([]); // clears previous search results
+  };
 
   return (
     // container for app
