@@ -26,12 +26,12 @@ function App() {
     if (!search.trim()) return;
     //checks if search is empty, if so function stops
 
-    setStatus("Loading..."); // updates state to laoding to show user requested it
+    setStatus("loading"); // updates state to laoding to show user requested it
     setError("null"); // clears previous error if any
     setGifs([]); // clears previous search results
     try {
       const url = `${BASE_URL}?api_key=${API_KEY}&q=${encodeURIComponent(
-        searchTerm
+        search
       )}&limit=25`; //api url, including the api key, the encoded search term, and a limit of 25 results
       // encodeRURIComponent - global JavaScript function that prepares a string for inclusion as a URL component
       const response = await fetch(url); // executes the ajax request and waits for the response
@@ -65,8 +65,8 @@ function App() {
     <div className="app">
       <h1>Gif-Tionary</h1>
       <SearchBar // renders searchbar
-        searchTerm={search} // passes current search state as prop
-        setSearchTerm={setSearch} // passes setter function as a prop for input changes
+        search={search} // passes current search state as prop
+        setSearch={setSearch} // passes setter function as a prop for input changes
         onSearch={fetchGifs} // passes function as a prop to be called when the search button is pressed
         isLoading={status === "loading"} // passes boolean prop to disable the button while the status is loading
       />
