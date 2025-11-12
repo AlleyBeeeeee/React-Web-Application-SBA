@@ -11,24 +11,26 @@ function App() {
   const [gifs, setGifs] = useState([]); // array to store fetched gifs
 
   // initializes state as empty string, holds the text the user type
-  const [Search, setSearch] = useState(""); // stores curent input value
+  const [search, setSearch] = useState(""); // stores curent input value
 
   // initializes state to track the app api interaction state
   const [status, setStatus] = useState("idle"); //starting idle - neutral state
 
   // initializes state to hold error messages from the api call
-  const [error, setError] = useState(null); //start at null
+  const [error, setError] = useState(null); //start at null - expected to eventually hold a complex data object or should indicate the complete absence of data.
 
   return (
+    // container for app
     <div className="app">
-      <h1>The GIPHY GIF Searcher</h1>
-      <SearchBar
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        onSearch={fetchGifs}
-        isLoading={status === "loading"}
+      <h1>Gif-Tionary</h1>
+      <SearchBar // renders searchbar
+        searchTerm={search} // passes current search state as prop
+        setSearchTerm={setSearch} // passes setter function as a prop for input changes
+        onSearch={fetchGifs} // passes function as a prop to be called when the search button is pressed
+        isLoading={status === "loading"} // passes boolean prop to disable the button while the status is loading
       />
       <GifGrabber gifs={gifs} status={status} error={error} />
+      {/* renders gifgrabber compo passing the current gif data, status, and error state as props  */}
     </div>
   );
 }
