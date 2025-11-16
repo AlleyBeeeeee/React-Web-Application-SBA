@@ -1,42 +1,196 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+body {
+  background-color: #0d0124;
+  color: #e0f7fa;
+  font-family: "Space Mono", monospace, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  /* stacks two gradients */
+  background-image: radial-gradient(
+      /* shape and position */ circle at top left,
+      #2a0a5e 1%,
+      transparent 60%
+    ),
+    radial-gradient(circle at bottom right, #1a013d 1%, transparent 60%);
+  background-size: 800px 800px;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.app {
+  max-width: 1200px;
+  padding: 40px 20px;
   text-align: center;
+  width: 100%;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+h1 {
+  color: #a700ff;
+  margin-bottom: 30px;
+  font-size: 3.5rem;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(167, 0, 255, 0.9);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+p {
+  color: #b39ddb;
+  font-size: 1.1rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* ---  search bar and controls --- */
+
+.search-bar {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 50px;
+  justify-content: center;
 }
 
-.card {
-  padding: 2em;
+.search-bar input {
+  padding: 15px 20px;
+  width: 100%;
+  max-width: 450px;
+  border: 2px solid #5a189a;
+  border-radius: 10px;
+  background-color: #240a45;
+  color: #e0f7fa;
+  transition: border-color 0.4s, box-shadow 0.4s;
 }
 
-.read-the-docs {
-  color: #888;
+.search-bar input:focus {
+  border-color: #a700ff;
+  outline: none;
+  box-shadow: 0 0 15px rgba(167, 0, 255, 0.5);
+}
+
+.search-bar input::placeholder {
+  color: #7b4397;
+}
+
+.search-bar button {
+  padding: 15px 30px;
+  background-color: #a700ff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  letter-spacing: 1px;
+  transition: background-color 0.4s, transform 0.2s, box-shadow 0.4s;
+}
+
+.search-bar button:hover:not(:disabled) {
+  background-color: #7e00c7;
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(167, 0, 255, 0.6);
+}
+
+.search-bar button:disabled {
+  background-color: #4a2b72;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* --- messages and errors --- */
+
+.error {
+  color: #ff5252;
+  font-weight: bold;
+  margin-top: 20px;
+  font-size: 1.15rem;
+  text-shadow: 0 0 8px rgba(255, 82, 82, 0.5);
+}
+
+/* --- gif grabber layout--- */
+
+.carousel-container {
+  position: relative;
+  padding: 0 20px;
+  margin: 40px auto;
+}
+
+.controls-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #5a189a;
+  padding-bottom: 10px;
+}
+
+.arrow {
+  width: 80px;
+  height: 40px;
+  background-color: #00ff7f;
+  color: #0d0124;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  text-transform: uppercase;
+}
+
+.arrow:hover {
+  background-color: #00cc66;
+  box-shadow: 0 0 15px rgba(0, 255, 127, 0.7);
+}
+
+.gif-grabber {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 20px;
+  padding: 0 10px;
+  justify-content: flex-start;
+
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 10px;
+
+  scrollbar-width: thin;
+  scrollbar-color: #00ff7f #240a45;
+  -webkit-overflow-scrolling: touch;
+}
+
+.gif-grabber::-webkit-scrollbar {
+  height: 8px;
+}
+
+.gif-grabber::-webkit-scrollbar-track {
+  background: #333;
+  border-radius: 4px;
+}
+
+.gif-grabber::-webkit-scrollbar-thumb {
+  background-color: #00ff7f;
+  border-radius: 4px;
+}
+
+.gif-item {
+  flex: 0 0 280px;
+  height: 280px;
+  scroll-snap-align: center;
+  background-color: #240a45;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 15px rgba(167, 0, 255, 0.2);
+  border: 1px solid #5a189a;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.gif-item:hover {
+  transform: scale(1.03);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 255, 127, 0.4);
+}
+
+.gif-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }

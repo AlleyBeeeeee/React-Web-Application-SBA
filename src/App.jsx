@@ -1,77 +1,59 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import SearchBar from "./components/SearchBar";
 import GifGrabber from "./components/GifGrabber";
 import "./App.css";
-
-const API_KEY = "nlR1KBPhlM4DpEfcmFwNgztGAmDofwlR";
-const BASE_URL = "https://api.giphy.com/v1/gifs/search"; // api endpoint
+import { fetchGifs, setSearch } from "./features/gif/gifSlice";
 
 function App() {
-  // initializes state as an empty array -'setgifs' to update it and holds the search result
-  const [gifs, setGifs] = useState([]); // array to store fetched gifs
+  const dispatch = useDispatch();
+  // HOOK TO GET THE DISPATCH FUNCTION, USED TO SEND ACTIONS TO THE STORE.
 
-  // initializes state as empty string, holds the text the user type
-  const [search, setSearch] = useState(""); // stores curent input value
+  // hooks to read state
+  const gifs = useSelector((state) => state.gifs.data);
+  // extracts the array of gifs.
+  const status = useSelector((state) => state.gifs.status);
+  // extracts the current status.
+  const error = useSelector((state) => state.gifs.error);
+  // extracts the current error message.
+  const search = useSelector((state) => state.gifs.search);
+  // extracts the current search term.
 
-  // initializes state to track the app api interaction state
-  const [status, setStatus] = useState("idle"); //starting idle - neutral state
+  //  initial load effect
+  useEffect(() => {
+    // runs only once when the component mounts.
+    if (search) {
+      // checks if the initial state loaded a search term from localstorage.
+      dispatch(fetchGifs(search));
+      // DISPATCHES THE API CALL IMMEDIATELY WITH THE LOADED SEARCH TERM.
+    }
+  }, []);
 
-  // initializes state to hold error messages from the api call
-  const [error, setError] = useState(null); //start at null - expected to eventually hold a complex data object or should indicate the complete absence of data
-
-  // ajax implementation
-  const fetchGifs = async () => {
-    // function to handle api fetch
-
-    if (!search.trim()) return;
-    //checks if search is empty, if so function stops
-
-    setStatus("loading"); // updates state to laoding to show user requested it
-    setError("null"); // clears previous error if any
-    setGifs([]); // clears previous search results
-    try {
-      const url = `${BASE_URL}?api_key=${API_KEY}&q=${encodeURIComponent(
-        search
-      )}&limit=25`; //api url, including the api key, the encoded search term, and a limit of 25 results
-      // encodeRURIComponent - global JavaScript function that prepares a string for inclusion as a URL component
-      const response = await fetch(url); // executes the ajax request and waits for the response
-
-      if (!response.ok) {
-        //checks http response status
-        throw new Error(`http error! : ${response.status}`); // if  error, throws a new error object with the status code.
-      }
-
-      const data = await response.json(); //parses response as json, waits for completion
-
-      if (data.data.length === 0) {
-        //use data.data to access the array of GIFs - list of GIFs located inside a property named data within that top-level object
-        setError(
-          `Sorry! No GIFs were found for "${search}". Try a different term.`
-        ); //error message if no results were found
-      } else {
-        setGifs(data.data); //updates gifs state with the array from api response
-        setError(null); // makes sure error state is cleared
-      }
-      setStatus("idle"); // resets status state - confirms that the results are complete for the last request.
-    } catch (e) {
-      //catches any errors
-      setError(`Search Failed: ${e.message}`);
-      setStatus("error");
+  // local handler function for searchbar to call
+  const handleSearchClick = () => {
+    if (search.trim()) {
+      // checks if the search term is valid.
+      dispatch(fetchGifs(search));
+      // DISPATCHES THE ASYNC THUNK WITH THE CURRENT SEARCH STATE VALUE.
     }
   };
 
   return (
-    // container for app
     <div className="app">
-      <h1>Gif-Tionary</h1>
-      <SearchBar // renders searchbar
-        search={search} // passes current search state as prop
-        setSearch={setSearch} // passes setter function as a prop for input changes
-        onSearch={fetchGifs} // passes function as a prop to be called when the search button is pressed
-        isLoading={status === "loading"} // passes boolean prop to disable the button while the status is loading
+      <h1>gif-tionary</h1>
+      <SearchBar
+        // renders searchbar component.
+        search={search}
+        // passes current search state from redux as prop.
+        setSearch={(term) => dispatch(setSearch(term))}
+        // passes a function that dispatches the setSearch action with the new input value.
+        onSearch={handleSearchClick}
+        // passes the local handler to initiate the search.
+        isLoading={status === "loading"}
+        // passes boolean prop to disable the button while loading.
       />
       <GifGrabber gifs={gifs} status={status} error={error} />
-      {/* renders gifgrabber compo passing the current gif data, status, and error state as props  */}
+      {/* renders gifgrabber compo passing the redux state data as props. */}
     </div>
   );
 }

@@ -1,36 +1,74 @@
+import { useRef } from "react";
+
 function GifGrabber({ gifs, status, error }) {
-  // destructures the props object into three essential variables: gifs (the array of results), status (the app's current state), and error (any error message)
-  //conditional rendering
+  const scrollRef = useRef(null);
+  // creates a ref object to hold a reference to the scrollable gif container.
+
+  const scroll = (direction) => {
+    // defines a function to programmatically scroll the carousel.
+    if (scrollRef.current) {
+      // checks if the ref is attached.
+      const scrollDistance = 300;
+      // defines the scroll distance.
+
+      const newScrollLeft =
+        scrollRef.current.scrollLeft +
+        (direction === "left" ? -scrollDistance : scrollDistance);
+      // calculates the new horizontal scroll position.
+
+      scrollRef.current.scrollTo({
+        // performs the scrolling action.
+        left: newScrollLeft,
+        behavior: "smooth",
+      });
+    }
+  };
+
   if (status === "loading") {
-    // checks if current status is 'loading
-    // if true immediately stops execution and renders loading message
-    return <p>Loading GIFS...</p>;
-  }
-  if (status === "error" && error) {
-    // two conditions to make sure component only display error when truly failed  - avoids error box
-    return <p className="error"> {error}</p>; // if both conditions match, renders feedback error message
-  }
-  if (gifs.length === 0 && status === "idle") {
-    //only shows instruction when results list is empty.
-    return <p>Type above to find your favorite GIFs!</p>;
-    // if true renders instruction message
+    // checks if the application is currently fetching data.
+    return <p>loading gifs...</p>;
+    // renders a loading message.
   }
 
-  // lets display some GIFs already
+  if (status === "error" && error) {
+    // checks if there was a failure.
+    return <p className="error">{error}</p>;
+    // renders the specific error message.
+  }
+
+  if (gifs.length === 0 && status === "idle") {
+    // checks if no gifs were found or if the initial idle state is active.
+    return <p>start typing above to find some gifs!</p>;
+    // renders instruction message.
+  }
+
   return (
-    // container for GifGrabber
-    <div className="gif-grabber">
-      {gifs.map(
-        (
-          gif //iterates over gifs - changes object to element
-        ) => (
+    <div className="carousel-container">
+      <div
+        className="gif-grabber"
+        ref={scrollRef} // attaches the useref hook to the scrollable element.
+      >
+        {gifs.map((gif) => (
+          // iterates over the 'gifs' array to render results.
           <div key={gif.id} className="gif-item">
-            {/* / creates a container div for each individual gif result - key required for react. */}
-            {/* accesses the specific image url- fulfills the requirement to insert some of the data retrieved into the dom */}
-            <img src={gif.images.fixed_height.url} alt={gif.title} />
+            {/* container for each gif. */}
+            <img
+              src={gif.images.fixed_height.url}
+              // data insertion into the dom.
+              alt={gif.title}
+              // sets the alt text.
+            />
           </div>
-        )
-      )}
+        ))}
+      </div>
+      <div className="controls-row">
+        <button className="arrow left-arrow" onClick={() => scroll("left")}>
+          &lt; prev
+        </button>
+        <button className="arrow right-arrow" onClick={() => scroll("right")}>
+          next &gt;
+        </button>
+      </div>
     </div>
   );
 }

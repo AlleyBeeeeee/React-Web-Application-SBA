@@ -1,26 +1,32 @@
-//defines the searchbar component, accepting props from App.jsx.
 function SearchBar({ search, setSearch, onSearch, isLoading }) {
-  //set current value, updates parent state, form handler to trigger api call, set disabled search button
+  // defines the searchbar component.
 
   function handleSubmit(e) {
-    e.preventDefault(); // prevents default browser behavior
-    onSearch(); // calls fetchgif() (makes ajax request)
+    // defines the function to handle the form submission.
+    e.preventDefault();
+    // prevents the default browser behavior (page reload).
+    onSearch();
+    // calls the prop function, which dispatches fetchgifs.
   }
+
   return (
     <form onSubmit={handleSubmit} className="search-bar">
       <input
         type="text"
-        value={search} // binds the input value to the searchTerm state.
-        onChange={(e) => setSearch(e.target.value)} // attaches event listener/  fires every time theres updates the search state
-        placeholder="Enter GIFs search here.."
-        disabled={isLoading} // disables the input while the api call is loading
+        value={search}
+        // binds the input value to state.
+        onChange={(e) => setSearch(e.target.value)}
+        // calls the prop function, which dispatches the setSearch redux action.
+        placeholder="enter gifs search here.."
+        disabled={isLoading}
+        // disables the input when the api call is loading.
       />
       <button type="submit" disabled={isLoading}>
-        {isLoading ? "Searching..." : "Search"}
-        {/* if loading is ture, show searching */}
+        {isLoading ? "searching..." : "search"}
         {/* displays different text depending on the loading status. */}
       </button>
     </form>
   );
 }
+
 export default SearchBar;
