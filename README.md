@@ -25,8 +25,3 @@ Implements the Carousel functionality, allowing GIF items to snap into center vi
 Netlify
 Hosted on Netlify
 Used for continuous deployment (CD) linked directly to the GitHub repository.
-
-Unsolved Problems / Future Enhancements
-Error Handling: Implement visual feedback on the arrows.
-Pagination: Implement infinite scroll to load more results as the user scrolls horizontally, optimizing API usage.
-User Feedback: Implement a debounce function to delay the search query until the user pauses typing, reducing unnecessary API calls during data entry.
