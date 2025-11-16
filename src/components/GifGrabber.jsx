@@ -17,7 +17,7 @@ function GifGrabber({ gifs, status, error }) {
       // calculates the new horizontal scroll position.
 
       scrollRef.current.scrollTo({
-        // performs the scrolling action.
+        //  the scrolling action.
         left: newScrollLeft,
         behavior: "smooth",
       });
@@ -37,7 +37,7 @@ function GifGrabber({ gifs, status, error }) {
   }
 
   if (gifs.length === 0 && status === "idle") {
-    // checks if no gifs were found or if the initial idle state is active.
+    // checks if no gifs were found and if the initial idle state is active.
     return <p>start typing above to find some gifs!</p>;
     // renders instruction message.
   }
@@ -61,6 +61,7 @@ function GifGrabber({ gifs, status, error }) {
           </div>
         ))}
       </div>
+      {/* scroll arrows  */}
       <div className="controls-row">
         <button className="arrow left-arrow" onClick={() => scroll("left")}>
           &lt; prev
